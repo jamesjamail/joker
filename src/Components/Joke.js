@@ -1,48 +1,71 @@
-import React, { Component } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Toast, ToastHeader, ToastBody } from 'react-bootstrap';
-class Joke extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            jokes: []
-        }
-    }
-    componentDidMount() {
-        fetch('https://icanhazdadjoke.com/', {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'Accept': 'application/json',
-            }
-        },)
-        .then((res) => res.json())
-        .then((data) => {
-            this.setState({jokes: data})
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    }
-    render() {
-        // const jokeCache = this.state.jokes.map((joke) => (
-        //     <div key={joke.id}>
-        //         <h3>{joke.joke}</h3>
-        //     </div>
-        // ))
-        return (
-            // {jokeCache}
-            <Container fluid="true" position="center">
-                <Toast>
-                    <ToastHeader>
-                        <strong className="mr-auto">Jokester Dad says...</strong>
-                        <small>just now</small>
-                    </ToastHeader>
-                    <ToastBody>{this.state.jokes.joke}</ToastBody>
-                </Toast>
-            </Container>
-        )
-    }
-}
+import React, { Component } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Card, CardContent, Grid } from "@material-ui/core/";
+import Typography from "@material-ui/core/Typography";
 
-export default Joke;
+const useStyles = makeStyles({
+  root: {
+    minWidth: 275,
+    maxWidth: 400
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)"
+  },
+  title: {
+    fontSize: 14
+  },
+  pos: {
+    marginBottom: 12
+  }
+});
+
+// componentDidMount() {
+// fetch("https://icanhazdadjoke.com/", {
+//     method: "GET",
+//     mode: "cors",
+//     headers: {
+//     Accept: "application/json"
+//     }
+// })
+//     .then(res => res.json())
+//     .then(data => {
+//     this.setState({ jokes: data });
+//     })
+//     .catch(err => {
+//     console.log(err);
+//     });
+// }
+
+export default function Joke() {
+  const classes = useStyles();
+  return (
+    <Grid container direction="row" justify="center" alignItems="center">
+      <Grid item xs={3}>
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              Word of the Day
+            </Typography>
+            <Typography variant="h5" component="h2">
+              some other text
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+              adjective
+            </Typography>
+            <Typography variant="body2" component="p">
+              well meaning and kindly.
+              <br />
+              {'"a benevolent smile"'}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+}
