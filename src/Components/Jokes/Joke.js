@@ -1,26 +1,65 @@
-import React, { Fragment } from "react";
-import { Paper, Typography, Card, CardContent } from "@material-ui/core";
-import { makeStyles, MuiThemeProvider } from "@material-ui/core/styles";
+import React, { Fragment, Component } from "react";
+import {
+  Paper,
+  Typography,
+  Card,
+  CardContent,
+  CardActionArea,
+  CardActions,
+  Button
+} from "@material-ui/core";
+import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
+import { connect } from "react-redux";
+import { fetchJoke } from "../../Actions/jokeActions";
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   jokeCard: {
     background: theme.palette.secondary.light
   }
-}));
+});
 
-function Joke(props) {
-  const classes = useStyles();
-  return (
-    <>
-      <Card className={classes.jokeCard}>
-        <CardContent>
-          <Typography variant="h5" color="inherit">
-            {props.joke}
-          </Typography>
-        </CardContent>
-      </Card>
-    </>
-  );
+class JokeCard extends React.Component {
+  componentDidMount() {
+    this.props.fetchJoke();
+  }
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <>
+        <Card className={classes.jokeCard}>
+          <CardActionArea>
+            <CardContent>
+              <Typography variant="h6" color="inherit">
+                {this.props.joke.joke}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Button
+              size="small"
+              color="primary"
+              onClick={() => {
+                console.log("click");
+                this.props.fetchJoke();
+                console.log(this.props.joke);
+              }}
+            >
+              Next
+            </Button>
+          </CardActions>
+        </Card>
+      </>
+    );
+  }
 }
 
-export default Joke;
+const mapStateToProps = state => ({
+  joke: state.joke.item
+});
+
+console.log(mapStateToProps);
+
+export default connect(mapStateToProps, { fetchJoke })(
+  withStyles(styles)(JokeCard)
+);
